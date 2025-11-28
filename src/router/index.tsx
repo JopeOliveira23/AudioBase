@@ -10,7 +10,7 @@ const Login = lazy(() => import("../pages/login"));
 
 const LoadingFallback = () => <LoadingComponent />;
 
-export const router = createHashRouter ([
+export const router = createBrowserRouter ([
   {
     element: (
       <Suspense fallback={<LoadingFallback />}>
