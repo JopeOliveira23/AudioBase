@@ -1,0 +1,124 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #b1e0ff51;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  
+  --primary-color: #8ab4f8; /* Cor primária (azul claro) */
+  --secondary-color: #e8eaed; /* Cor secundária (cinza claro) */
+  --tertiary-color: #9aa0a6; /* Cor terciária (cinza médio) */
+  --bg-color: #ffffff; /* Cor de fundo (cinza escuro) */
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+    overflow-y: scroll; /* Adiciona uma barra de rolagem vertical se o conteúdo exceder a altura */
+    max-width: 80rem; /* Largura máxima do conteúdo principal */
+    margin: 0 auto; /* Centraliza o conteúdo principal horizontalmente */
+    margin-top: 2rem; /* Margem no topo */
+    height: calc(100vh - 10rem - 4rem); /* Calcula a altura para preencher o espaço restante da tela */
+}
+
+article {
+    background: none; /* Sem cor de fundo */
+    border-radius: 0; /* Sem bordas arredondadas */
+    padding: 0; /* Remove o padding */
+    padding: 0 1rem; /* Espaçamento interno nos lados */
+    margin-bottom: 1.25rem; /* Margem inferior */
+    box-shadow: none; /* Sem sombra */
+    transition: background-color 0.3s ease, border-bottom-color 0.3s ease; /* Transição suave */
+    border-bottom: 1px solid var(--bg-color); /* Borda inferior */
+    padding-bottom: 1.5rem; /* Espaçamento interno inferior */
+}
+
+article:hover {
+    transform: scale(1.01); /* Aumenta ligeiramente o tamanho ao passar o mouse */
+    cursor: pointer; /* Muda o cursor para uma mão */
+}
+
+article h2 {
+    margin-top: 0; /* Remove a margem superior */
+    font-weight: 600; /* Peso da fonte */
+    font-size: 1.6rem; /* Tamanho da fonte */
+    border-bottom: none; /* Sem borda inferior */
+    padding-bottom: 0; /* Sem espaçamento interno inferior */
+    margin-bottom: 0.25rem; /* Margem inferior */
+    color: var(--primary-color); /* Cor do texto */
+}
+
+article p {
+    margin: 0.5rem 0; /* Margem superior e inferior */
+    line-height: 1.6; /* Altura da linha para melhor legibilidade */
+    font-size: 1rem; /* Tamanho da fonte */
+    margin-bottom: 0.5rem; /* Margem inferior */
+    color: var(--secondary-color); /* Cor do texto */
+}
+
+article p strong {
+    color: var(--tertiary-color); /* Cor do texto em negrito */
+    font-weight: 400; /* Peso da fonte */
+}
+
+article a {
+    color: var(--primary-color); /* Cor do link */
+    text-decoration: none; /* Remove o sublinhado padrão */
+    font-weight: 200; /* Peso da fonte */
+}
+
+article a:hover {
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
+
+.footer {
+  margin-top: auto;  /* Empurra o footer para o fim da página */
+  width: 100%;
+  color: var(--tertiary-color);
+  background-color: var(--bg-color);
+  padding: 15px 20px;
+  font-size: 0.8rem;
+}
+
+.footer-location {
+    color: #9aa0a6; /* Cor do texto */
+    margin-bottom: 10px; /* Margem inferior */
+}
+
+.footer-links {
+    list-style: none; /* Remove os marcadores da lista */
+    display: flex; /* Habilita o layout flexbox */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    gap: 15px; /* Espaçamento entre os links */
+}
+
+.footer-links a {
+    color: var(--tertiary-color); /* Cor do link */
+    text-decoration: none; /* Remove o sublinhado */
+    transition: color 0.2s; /* Transição suave para a cor */
+}
+
+.footer-links a:hover {
+    color: var(--accent-color); /* Muda a cor do link ao passar o mouse (variável não definida) */
+    color: var(--primary-color); /* Muda a cor do link ao passar o mouse */
+}
+
+@media (max-width: 480px) {
+    .footer { /* Estilos para o rodapé em telas muito pequenas */
+        display: none; /* Oculta o rodapé */
+    }
+}
