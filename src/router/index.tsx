@@ -3,13 +3,12 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import AuthLayout from "../layout/AuthLayout";
 import { lazy, Suspense } from "react";
-import Loading from "../components/ProgressSpinner";
+import LoadingComponent from "../components/ProgressSpinner";
 
 const Home = lazy(() => import("../pages/home"));
 const Login = lazy(() => import("../pages/login"));
 
-// Componente de Loading para Suspense fallback
-const LoadingFallback = () => <Loading />;
+const LoadingFallback = () => <LoadingComponent />;
 
 export const router = createBrowserRouter([
   {
