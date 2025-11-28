@@ -1,13 +1,13 @@
 import './styles/App.ts'
-
-import Renderer from './layout/index.tsx';
-
-
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
-
   return (
-    <Renderer />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   )
 }
 

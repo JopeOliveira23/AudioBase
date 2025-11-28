@@ -3,6 +3,7 @@ import { Card } from "primereact/card";
 import CarouselComponent from "../components/Carousel";
 
 const Home = () => {
+
   return (
     <>
       <div className="surface-ground p-5">
@@ -33,17 +34,6 @@ const Home = () => {
           ))}
         </div>
       </div>
-
-      <footer className="footer">
-        <ul className="footer-links">
-          <li>
-              <a href="https://github.com/JopeOliveira23" target="_blank">GitHub</a>
-          </li>
-          <li>
-              <a href="https://www.linkedin.com/in/joaooliveira2001/" target="_blank">LinkedIn</a>
-          </li>
-        </ul>
-      </footer>
     </>
   );
 };
