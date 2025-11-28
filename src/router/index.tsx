@@ -1,5 +1,5 @@
 // router.tsx
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, createHashRouter  } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import AuthLayout from "../layout/AuthLayout";
 import { lazy, Suspense } from "react";
@@ -10,7 +10,7 @@ const Login = lazy(() => import("../pages/login"));
 
 const LoadingFallback = () => <LoadingComponent />;
 
-export const router = createBrowserRouter([
+export const router = createHashRouter ([
   {
     element: (
       <Suspense fallback={<LoadingFallback />}>
