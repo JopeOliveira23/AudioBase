@@ -7,9 +7,11 @@ import { Toast } from "primereact/toast";
 
 import { useRef } from "react";
 import { useTheme } from "../../hooks/useTheme";
+import { useNavigate } from "react-router-dom";
 
 const MenuComponent = () => {
     const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
 
     const menuRight = useRef<Menu>(null);
     const toast = useRef<Toast>(null);
@@ -51,6 +53,7 @@ const MenuComponent = () => {
                 {
                     label: 'Sair',
                     icon: 'pi pi-sign-out',
+                    command: () => navigate('/login')
                 }
             ]
         }

@@ -1,27 +1,40 @@
-
-import {Background, Button, Card, IconWrapper, Text, Title, Wifi} from "./styles"
-
+import { useNavigate } from "react-router-dom";
+import {Background, ImageWrapper, ErrorImage, Wifi} from "./styles"
 import error from "../../assets/error.svg"
 
-export function ErrorPage() {
+import { Button } from "primereact/button";
+import { Card } from "primereact/card";
 
+export default function Login() {
+  const navigate = useNavigate();
   const handleReload = () => {
-
+    //navigate("/");
+    navigate(-1);
   }
 
   return (
     <Background>
-      <Card>
-        <Title>Ocorreu um erro</Title>
-        <Text>Um erro inesperado ocorreu ao carregar os dados.</Text>
-        <Text>Recomendamos que você recarregue a página.</Text>
-        <Wifi size={60} color="#fcfaf8" weight="bold" />
-        <img src={error} alt="" />
-        <Text>Caso o problema persista, entre em contato com o suporte.</Text>
-        <Button onClick={handleReload}>
-          <IconWrapper size={15} color="#f0f0f0" weight="bold" />
-          Recarregar a página
-        </Button>
+      <Card title="Ocorreu um erro" style={{ textAlign: "center" }}>
+        <p className="mt-0">
+          Um erro inesperado ocorreu ao carregar os dados.
+          <br />
+          Recomendamos que você recarregue a página.
+        </p>
+
+        <ImageWrapper>
+          <Wifi color="#fcfaf8" weight="bold" />
+          <ErrorImage src={error} alt="" />
+        </ImageWrapper>
+
+        <p>
+          Caso o problema persista, entre em contato com o suporte.
+        </p>
+
+        <Button
+          label="Recarregar pagina"
+          icon="pi pi-refresh"
+          onClick={handleReload}
+        />
       </Card>
     </Background>
   )
