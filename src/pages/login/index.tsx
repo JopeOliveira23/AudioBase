@@ -5,18 +5,28 @@ import { InputSwitch } from "primereact/inputswitch";
 import { Button } from "primereact/button";
 import { useState } from "react";
 import { Background } from "./styles";
+import { Auth } from "../../context/auth/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
 
+  const handleLogin = () => {
+    const ok = Auth.login(username, password);
+
+    if (ok) {
+      navigate("/", { replace: true });
+    } else {
+      alert("Usuário ou senha incorretos.");
+    }
+  };
+
   return (
     <Background>
-      <Card
-        title="AudioBase"
-        style={{ width: "350px", textAlign: "center" }}
-      >
+      <Card title="AudioBase" style={{ width: "350px", textAlign: "center" }}>
         <div className="flex flex-column align-items-start gap-2">
           <label htmlFor="username">Usuário</label>
           <InputText
@@ -39,16 +49,10 @@ export default function Login() {
             feedback={false}
             className="w-full"
           />
-          <InputSwitch
-            checked={checked}
-            onChange={(e) => setChecked(e.value)}
-          />
+          <InputSwitch checked={checked} onChange={(e) => setChecked(e.value)} />
         </div>
 
-        <Button
-          label="Entrar"
-          className="w-full mt-2"
-        />
+        <Button label="Entrar" className="w-full mt-2" onClick={handleLogin} />
       </Card>
     </Background>
   );

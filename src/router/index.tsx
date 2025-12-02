@@ -1,53 +1,55 @@
-import { createBrowserRouter, createHashRouter  } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import AuthLayout from "../layout/AuthLayout";
 import { lazy, Suspense } from "react";
 import LoadingComponent from "../components/ProgressSpinner";
+import { RequireAuth } from "../context/auth/RequiredAuth";
 
 const Home = lazy(() => import("../pages/home"));
-const Login = lazy(() => import("../pages/login/index"));
-const Error = lazy(() => import("../pages/error/index"));
+const Login = lazy(() => import("../pages/login"));
+const Error = lazy(() => import("../pages/error"));
 
 const LoadingFallback = () => <LoadingComponent />;
 
-export const router = createBrowserRouter ([
+export const router = createBrowserRouter([
+  // ROTAS LIVRES (LOGIN)
   {
     element: (
       <Suspense fallback={<LoadingFallback />}>
-          <AuthLayout />
+        <AuthLayout />
       </Suspense>
     ),
     children: [
-      { 
-        path: "/login", 
-        element: <Login /> 
-      },
+      { path: "/login", element: <Login /> },
     ],
   },
+
+  // ROTAS PROTEGIDAS
   {
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-          <MainLayout />
-      </Suspense>
-    ),
+    element: <RequireAuth />,
     children: [
-      { 
-        path: "/", 
-        element: <Home /> 
-      },
-    ],
+      {
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <MainLayout />
+          </Suspense>
+        ),
+        children: [
+          { path: "/", element: <Home /> },
+        ]
+      }
+    ]
   },
+
+  // ERRO
   {
     element: (
       <Suspense fallback={<LoadingFallback />}>
-          <AuthLayout />
+        <AuthLayout />
       </Suspense>
     ),
     children: [
-      { 
-        path: "/error", 
-        element: <Error /> 
-      },
+      { path: "/error", element: <Error /> },
     ],
   },
 ]);

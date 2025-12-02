@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { useTheme } from "../../hooks/useTheme";
 import { useNavigate } from "react-router-dom";
+import { Auth } from "../../context/auth/auth";
 
 const MenuComponent = () => {
     const { theme, toggleTheme } = useTheme();
@@ -53,7 +54,10 @@ const MenuComponent = () => {
                 {
                     label: 'Sair',
                     icon: 'pi pi-sign-out',
-                    command: () => navigate('/login')
+                    command: () => {
+                        Auth.logout();
+                        navigate('/login', { replace: true });
+  }
                 }
             ]
         }
