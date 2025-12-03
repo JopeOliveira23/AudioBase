@@ -1,5 +1,4 @@
-// context/ThemeContext.tsx
-import { type ReactNode, createContext, useEffect, useState, useCallback } from "react";
+import { type ReactNode, createContext, useEffect, useState, useCallback, useContext, useMemo } from "react";
 
 interface ThemeContextType {
   theme: "light" | "dark";
@@ -9,17 +8,26 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
+// Hook personalizado para usar o contexto
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+};
+
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
 const THEME_CONFIG = {
   light: {
-    primeTheme: "mira",
+    primeTheme: "saga-orange",
     dataTheme: "light"
   },
   dark: {
-    primeTheme: "bootstrap4-dark-blue", 
+    primeTheme: "arya-orange",
     dataTheme: "dark"
   }
 } as const;
@@ -27,18 +35,26 @@ const THEME_CONFIG = {
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const saved = localStorage.getItem("theme");
-    return (saved === "light" || saved === "dark") ? saved : "light";
+    if (saved === "light" || saved === "dark") {
+      return saved;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return "dark";
+    }
+    return "light";
   });
-
-  const currentThemeConfig = THEME_CONFIG[theme];
 
   const toggleTheme = useCallback(() => {
     setTheme(prev => prev === "light" ? "dark" : "light");
   }, []);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", currentThemeConfig.dataTheme);
+    const currentThemeConfig = THEME_CONFIG[theme];
     
+    document.documentElement.setAttribute("data-theme", currentThemeConfig.dataTheme);
+    document.documentElement.classList.remove("light-theme", "dark-theme");
+    document.documentElement.classList.add(`${theme}-theme`);
+
     const themeLinkId = "prime-theme";
     let themeLink = document.getElementById(themeLinkId) as HTMLLinkElement | null;
 
@@ -46,20 +62,31 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       themeLink = document.createElement("link");
       themeLink.id = themeLinkId;
       themeLink.rel = "stylesheet";
+      themeLink.type = "text/css";
       document.head.appendChild(themeLink);
     }
 
-    themeLink.href = `/node_modules/primereact/resources/themes/${currentThemeConfig.primeTheme}/theme.css`;
+    themeLink.href = `/themes/${currentThemeConfig.primeTheme}/theme.css`;
     
     localStorage.setItem("theme", theme);
     localStorage.setItem("primeTheme", currentThemeConfig.primeTheme);
-  }, [theme, currentThemeConfig]);
 
-  const contextValue: ThemeContextType = {
+    themeLink.onload = () => {
+      console.log(`Tema ${currentThemeConfig.primeTheme} carregado`);
+    };
+    
+    themeLink.onerror = () => {
+      console.error(`Erro ao carregar tema: ${currentThemeConfig.primeTheme}`);
+      themeLink!.href = `/themes/saga-orange/theme.css`;
+    };
+    
+  }, [theme]);
+
+  const contextValue = useMemo(() => ({
     theme,
-    primeTheme: currentThemeConfig.primeTheme,
+    primeTheme: THEME_CONFIG[theme].primeTheme,
     toggleTheme
-  };
+  }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={contextValue}>

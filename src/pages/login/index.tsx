@@ -102,7 +102,7 @@ export default function Login() {
             />
 
             <label htmlFor="password">Senha</label>
-            <div className="flex align-items-center gap-1 w-full">
+            <div className="flex align-items-center gap-6 w-full">
               <Password
                 id="password"
                 value={password}
@@ -110,7 +110,6 @@ export default function Login() {
                 placeholder="Digite sua senha"
                 toggleMask
                 feedback={false}
-                className="w-full"
               />
 
               <InputSwitch

@@ -2,8 +2,14 @@ import styled, {keyframes} from "styled-components"
 import {WifiX} from "@phosphor-icons/react";
 
 export const Background = styled.main`
-  background: #003b5aff;
-  background: linear-gradient(90deg, rgba(0, 59, 90, 1) 0%, rgba(0, 112, 173, 1) 58%);
+  background: linear-gradient(
+    90deg, 
+    rgba(28, 28, 28, 1) 0%, 
+    rgba(38, 38, 38, 1) 20%, 
+    rgba(45, 45, 45, 1) 50%, 
+    rgba(38, 38, 38, 1) 80%, 
+    rgba(28, 28, 28, 1) 100%
+  );
 
   width: 100vw;
   height: 100vh;
