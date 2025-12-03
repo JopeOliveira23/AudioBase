@@ -52,10 +52,6 @@ export default function Login() {
           clearLoginRef.current?.();
           // fechar a modal já é feito dentro do RegisterDialog (onHide é chamado lá)
         }}
-        onError={(err) => {
-          // opcional: você pode mostrar toast ou setar algo no estado do pai
-          console.error("Erro no registro:", err);
-        }}
       />
     </S.Background>
   );

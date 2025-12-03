@@ -10,10 +10,9 @@ interface RegisterDialogProps {
   visible: boolean;
   onHide: () => void;
   onSuccess: () => void;   // AVISA ao pai que tudo ok (pai chama clearLoginForm)
-  onError: (err: string) => void; // opcional
 }
 
-export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: RegisterDialogProps) => {
+export const RegisterDialog = ({ visible, onHide, onSuccess }: RegisterDialogProps) => {
   const [newUser, setNewUser] = useState({ username: "", password: "", confirm: "" });
   const [errorRegister, setErrorRegister] = useState("");
 
@@ -39,7 +38,6 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
     if (!ok) {
       const msg = error || "Erro ao criar usuário.";
       setErrorRegister(msg);
-      onError?.(msg);
       return;
     }
 
@@ -51,9 +49,9 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
 
   return (
     <Dialog
-      header="Criar novo usuário"
+      header="Criar movo usuario"
+      style={{ width: "400px", textAlign: "center" }}
       visible={visible}
-      style={{ width: "400px" }}
       modal
       draggable={false}
       onHide={() => {
@@ -61,7 +59,7 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
         onHide();
       }}
     >
-      <div className="flex flex-column gap-3">
+      <div className="flex flex-column gap-3" style={{textAlign: "left"}}>
         {errorRegister && <small style={{ color: "red", marginBottom: "1rem" }}>{errorRegister}</small>}
 
         <div className="flex flex-column gap-2">
@@ -71,9 +69,6 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
             onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
             className="w-full"
           />
-        </div>
-
-        <div className="flex flex-column gap-2">
           <label>Senha</label>
           <Password
             value={newUser.password}
@@ -82,9 +77,6 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
             toggleMask
             feedback={false}
           />
-        </div>
-
-        <div className="flex flex-column gap-2">
           <label>Confirmar senha</label>
           <Password
             value={newUser.confirm}
