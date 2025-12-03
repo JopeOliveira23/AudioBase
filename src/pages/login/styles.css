@@ -1,0 +1,13 @@
+/* DEBUG - identificar problemas de layout */
+* {
+    border: 1px solid red !important;
+}
+
+img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+body {
+    font-size: 16px !important;
+}
