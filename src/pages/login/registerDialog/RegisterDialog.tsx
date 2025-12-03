@@ -78,7 +78,7 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
           <Password
             value={newUser.password}
             onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-            inputStyle={{ width: "20rem" }}
+            inputStyle={{ width: "21.8rem" }}
             toggleMask
             feedback={false}
           />
@@ -89,7 +89,7 @@ export const RegisterDialog = ({ visible, onHide, onSuccess, onError }: Register
           <Password
             value={newUser.confirm}
             onChange={(e) => setNewUser({ ...newUser, confirm: e.target.value })}
-            inputStyle={{ width: "20rem" }}
+            inputStyle={{ width: "21.8rem" }}
             toggleMask
             feedback={false}
           />
