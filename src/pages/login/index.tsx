@@ -24,11 +24,11 @@ export default function Login() {
           </p>
           <S.InfoIcons>
             <div>
-              <i className="pi pi-headphones" style={{ fontSize: '1.5rem', color: '#4a6fff' }} />
+              <i className="pi pi-headphones" />
               <span>Biblioteca com +10K faixas</span>
             </div>
             <div>
-              <i className="pi pi-users" style={{ fontSize: '1.5rem', color: '#4a6fff' }} />
+              <i className="pi pi-users" />
               <span>Comunidade ativa</span>
             </div>
           </S.InfoIcons>

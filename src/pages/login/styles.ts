@@ -43,11 +43,28 @@ export const TextBlock = styled.div`
   max-width: 25vw;
   min-width: 300px;
   flex: 1;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: white;
+
+  padding: 2rem;
+  border-radius: 15px;
+
+  color: #fff;
   text-align: left;
+
+  /* 🎐 Glass Effect */
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  /* Profundidade */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+
+  /* Melhora renderização do blur */
+  transform: translateZ(0);
 
   h2 {
     font-size: 3.5rem;
@@ -75,5 +92,14 @@ export const InfoIcons = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+
+    >i {
+      font-size: 1.5rem;
+      border-radius: 25px;
+      padding: 10px;
+      background: var(--highlight-bg);
+      color: var(--primary-color)
+
+    }
   }
 `;
