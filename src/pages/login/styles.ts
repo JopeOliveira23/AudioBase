@@ -54,36 +54,22 @@ export const GlassButton = styled(Button)`
   -webkit-backdrop-filter: blur(5px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.25);
 
-  /* Profundidade */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 
-  /* Performance */
-  transform: translateZ(0);
-  will-change: transform, box-shadow;
-
-  /* 🎯 Transição suave */
   transition:
     transform 120ms cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 120ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Hover sutil */
   &:hover {
-    transform: scale(1.03);
-    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
   }
 
-  /* ✅ POP no clique */
   &:active {
-    transform: scale(0.92);
+    transform: translateY(1px);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   }
-
-  /* Para acesso via teclado */
-  &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
-  }
 `;
+
 
 export const CardGlass = styled.div`
   width: 35rem;
