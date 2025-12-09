@@ -3,12 +3,15 @@ import styled, { keyframes } from "styled-components"
 const popAnimation = keyframes`
   0% {
     transform: scale(1.05);
+    filter: drop-shadow(0 0 0 rgba(255, 100, 0, 0.6));
   }
   50% {
     transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(255, 200, 0, 0.45));
   }
   100% {
     transform: scale(1.05);
+    filter: drop-shadow(0 0 0 rgba(255, 100, 0, 0.6));
   }
 `;
 

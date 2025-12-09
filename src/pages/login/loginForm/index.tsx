@@ -28,7 +28,7 @@ export const LoginForm = ({ onLoginSuccess, onOpenRegister, provideClear }: Logi
   const [isPopping, setIsPopping] = useState(false);
 
   const handleClick = () => {
-    //toggleTheme();
+    toggleTheme();
     setIsPopping(true);
     setTimeout(() => setIsPopping(false), 300);
   };
