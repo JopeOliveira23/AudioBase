@@ -67,12 +67,22 @@ export const RegisterDialog = ({ visible, onHide, onSuccess }: RegisterDialogPro
           <InputText
             value={newUser.username}
             onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && newUser.username && newUser.password && newUser.confirm) {
+                handleSaveUser();
+              }
+            }}
             className="w-full"
           />
           <label>Senha</label>
           <Password
             value={newUser.password}
             onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && newUser.username && newUser.password && newUser.confirm) {
+                handleSaveUser();
+              }
+            }}
             inputStyle={{ width: "21.8rem" }}
             toggleMask
             feedback={false}
@@ -81,6 +91,11 @@ export const RegisterDialog = ({ visible, onHide, onSuccess }: RegisterDialogPro
           <Password
             value={newUser.confirm}
             onChange={(e) => setNewUser({ ...newUser, confirm: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && newUser.username && newUser.password && newUser.confirm) {
+                handleSaveUser();
+              }
+            }}
             inputStyle={{ width: "21.8rem" }}
             toggleMask
             feedback={false}

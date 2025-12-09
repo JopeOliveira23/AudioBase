@@ -74,6 +74,11 @@ export const LoginForm = ({ onLoginSuccess, onOpenRegister, provideClear }: Logi
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && username && password) {
+                handleLogin();
+              }
+            }}
             placeholder="Digite seu usuário"
             className="w-full"
           />
@@ -83,6 +88,11 @@ export const LoginForm = ({ onLoginSuccess, onOpenRegister, provideClear }: Logi
             inputStyle={{ width: "20rem" }}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && username && password) {
+                handleLogin();
+              }
+            }}
             placeholder="Digite sua senha"
             toggleMask
             feedback={false}
