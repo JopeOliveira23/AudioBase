@@ -3,7 +3,9 @@ import { LoginForm } from "./loginForm";
 import { useNavigate } from "react-router-dom";
 import studio from "../../assets/studio.png";
 import { RegisterDialog } from "./registerDialog/RegisterDialog";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { slides } from "./interface";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,27 +14,99 @@ export default function Login() {
   // useRef para guardar a função clearLoginForm exposta pelo LoginForm
   const clearLoginRef = useRef<null | (() => void)>(null);
 
+const TextBlockRotator = () => {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
+
+  const autoplayRef = useRef<number | null>(null);
+
+  const slide = slides[index];
+
+  const startAutoplay = () => {
+    if (autoplayRef.current) {
+      clearTimeout(autoplayRef.current);
+    }
+
+    autoplayRef.current = window.setTimeout(() => {
+      changeSlide("next");
+    }, 10000);
+  };
+
+  const changeSlide = (type: "next" | "prev") => {
+    if (autoplayRef.current) {
+      clearTimeout(autoplayRef.current);
+    }
+
+    setDirection(type);
+    setVisible(false);
+
+    setTimeout(() => {
+      setIndex((prev) => {
+        if (type === "next") return (prev + 1) % slides.length;
+        return (prev - 1 + slides.length) % slides.length;
+      });
+
+      setVisible(true);
+      startAutoplay(); // 🔥 reinicia o tempo após mudar o slide
+    }, 500);
+  };
+
+  useEffect(() => {
+    startAutoplay();
+
+    return () => {
+      if (autoplayRef.current) {
+        clearTimeout(autoplayRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <S.Container>
+      <S.GlassButton
+        rounded
+        severity="secondary"
+        icon="pi pi-chevron-left"
+        onClick={() => changeSlide("prev")}
+      />
+
+        <S.CardGlass>
+          <div
+            className={`content ${
+              visible ? `fade-in ${direction}` : `fade-out ${direction}`
+            }`}
+          >
+            <h2>{slide.title}</h2>
+            <p>{slide.description}</p>
+          
+            <S.InfoIcons>
+              {slide.icons.map((item, i) => (
+                <div key={i}>
+                  <i className={item.icon} />
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </S.InfoIcons>
+          </div>
+        </S.CardGlass>
+            
+      <S.GlassButton
+        rounded
+        severity="secondary"
+        icon="pi pi-chevron-right"
+        onClick={() => changeSlide("next")}
+      />
+    </S.Container>
+  );
+};
+
+
   return (
     <S.Background>
       <S.ImageBackground image={studio} />
-      <S.Container>
-        <S.TextBlock>
-          <h2>Conecte-se à sua comunidade de áudio favorita</h2>
-          <p>
-            Faça login para acessar milhares de conteúdos exclusivos ou crie uma nova conta 
-            para começar sua jornada musical conosco.
-          </p>
-          <S.InfoIcons>
-            <div>
-              <i className="pi pi-headphones" />
-              <span>Biblioteca com +10K faixas</span>
-            </div>
-            <div>
-              <i className="pi pi-users" />
-              <span>Comunidade ativa</span>
-            </div>
-          </S.InfoIcons>
-        </S.TextBlock>
+      <S.Main>
+        <TextBlockRotator />
 
         <LoginForm
           onLoginSuccess={() => navigate("/", { replace: true })}
@@ -42,7 +116,7 @@ export default function Login() {
             clearLoginRef.current = clearLoginForm;
           }}
         />
-      </S.Container>
+      </S.Main>
 
       <RegisterDialog
         visible={showRegister}
