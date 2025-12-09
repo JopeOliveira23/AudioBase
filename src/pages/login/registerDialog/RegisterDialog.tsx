@@ -49,7 +49,7 @@ export const RegisterDialog = ({ visible, onHide, onSuccess }: RegisterDialogPro
 
   return (
     <Dialog
-      header="Criar movo usuario"
+      header="Criar novo usuario"
       style={{ width: "400px", textAlign: "center" }}
       visible={visible}
       modal
