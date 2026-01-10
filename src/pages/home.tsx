@@ -176,9 +176,14 @@ const Home: React.FC = () => {
     setCurrentTime(initial);
   }, []);
 
+  /* ---------- State adicional ---------- */
+  const [focusedPostId, setFocusedPostId] = useState<number | null>(posts[0]?.id ?? null);
+  
   useEffect(() => {
+    const SEEK_STEP = 10;
+    const SEEK_STEP_FAST = 30;
+  
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Evita conflito com inputs, sliders, etc
       const target = e.target as HTMLElement;
       const isTyping =
         target.tagName === 'INPUT' ||
@@ -187,25 +192,47 @@ const Home: React.FC = () => {
     
       if (isTyping) return;
     
+      // SPACE → Play / Pause do post focado
       if (e.code === 'Space') {
         e.preventDefault();
+        const post = posts.find(p => p.id === focusedPostId);
+        if (!post) return;
+        togglePlay(post);
+        return;
+      }
+    
+      // ← / → → retrocede / avança do post focado
+      if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+        e.preventDefault();
+        const post = posts.find(p => p.id === focusedPostId);
+        if (!post) return;
       
-        // Se está tocando, pausa
-        if (playingPostId !== null) {
-          const currentPost = posts.find(p => p.id === playingPostId);
-          if (currentPost) {
-            togglePlay(currentPost);
-          }
-          return;
-        }
+        const step = e.shiftKey ? SEEK_STEP_FAST : SEEK_STEP;
       
-        // Se não está tocando, toca o último ou o primeiro
-        const postToPlay =
-          lastPlayedPostRef.current ?? posts[0];
+        setCurrentTime(prev => {
+          const current = prev[post.id] ?? 0;
+          const next = e.code === 'ArrowRight' ? current + step : current - step;
+        
+          return {
+            ...prev,
+            [post.id]: Math.max(0, Math.min(post.duration, next))
+          };
+        });
+        return; // NÃO inicia o play automaticamente
+      }
+    
+      // TAB → muda o post focado
+      if (e.code === 'Tab') {
+        e.preventDefault();
+        const currentIndex = posts.findIndex(p => p.id === focusedPostId);
+        if (currentIndex === -1) return;
       
-        if (postToPlay) {
-          togglePlay(postToPlay);
-        }
+        let nextIndex = e.shiftKey ? currentIndex - 1 : currentIndex + 1;
+      
+        if (nextIndex < 0) nextIndex = posts.length - 1;
+        if (nextIndex >= posts.length) nextIndex = 0;
+      
+        setFocusedPostId(posts[nextIndex].id);
       }
     };
   
@@ -214,7 +241,8 @@ const Home: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [playingPostId, posts, togglePlay]);
+  }, [focusedPostId, posts, togglePlay]);
+
 
   useEffect(() => {
     if (!showVolume) return;
