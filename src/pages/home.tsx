@@ -4,6 +4,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Slider } from 'primereact/slider';
+import { ScrollTop } from 'primereact/scrolltop';
 
 /* =======================
  * Types
@@ -39,7 +40,10 @@ const Home: React.FC = () => {
   const posts: Post[] = [
     { id: 1, user: 'DJ Underground', hours: 1, title: 'Base Noturna Vol. 1', duration: 95 },
     { id: 2, user: 'Beat Maker X', hours: 3, title: 'Trap Session 140bpm', duration: 150 },
-    { id: 3, user: 'LoFi Lab', hours: 6, title: 'Midnight Chill', duration: 172 }
+    { id: 3, user: 'LoFi Lab', hours: 6, title: 'Midnight Chill', duration: 172 },
+    { id: 1, user: 'DJ Underground', hours: 1, title: 'Base Noturna Vol. 1', duration: 95 },
+    { id: 2, user: 'Beat Maker X', hours: 3, title: 'Trap Session 140bpm', duration: 150 },
+    { id: 3, user: 'LoFi Lab', hours: 6, title: 'Midnight Chill', duration: 172 },
   ];
 
   /* =======================
@@ -283,146 +287,141 @@ const Home: React.FC = () => {
    * Render
    * ======================= */
   return (
-    <div className="min-h-screen surface-ground py-4">
-      <div className="flex justify-content-center">
-        <div style={{ maxWidth: '1000px', width: '100%' }}>
-          <TabView>
-            <TabPanel header="Explorar">
-              <div className="flex flex-column gap-6">
-                {posts.map(post => {
-                  const isLiked = likedPosts.includes(post.id);
-                  const time = currentTime[post.id] ?? 0;
-                  const isPlaying = playingPostId === post.id;
+    <TabView className="w-full">
+      <TabPanel header="Explorar">
+        <div className="flex flex-column gap-6 overflow-auto" style={{height: 'calc(100vh - 27vh)'}}>
+          {posts.map(post => {
+            const isLiked = likedPosts.includes(post.id);
+            const time = currentTime[post.id] ?? 0;
+            const isPlaying = playingPostId === post.id;
 
-                  return (
-                    <Card
-                      key={post.id}
-                      className="
-                        surface-card
-                        border-round-xl
-                        shadow-1
-                        transition-all
-                        transition-duration-200
-                        hover:shadow-3
-                        hover:surface-hover
-                        p-3
-                      "
-                    >
-                      {/* Header */}
-                      <div className="flex align-items-center justify-content-between mb-3">
-                        <div className="flex align-items-center">
-                          <Avatar
-                            image="https://primefaces.org/cdn/primereact/images/avatar/onyamalimba.png"
-                            className="mr-3"
-                          />
-                          <div>
-                            <div className="font-bold">{post.user}</div>
-                            <small className="text-color-secondary">
-                              há {post.hours}h
-                            </small>
-                          </div>
-                        </div>
-                        <Button icon="pi pi-ellipsis-h" rounded text />
-                      </div>
-
-                      {/* Conteúdo */}
-                      <div className="mb-3">
-                        <div className="font-bold mb-1">{post.title}</div>
+            return (
+              <Card
+                key={post.id}
+                className="
+                  surface-card
+                  border-round-xl
+                  shadow-1
+                  transition-all
+                  transition-duration-200
+                  hover:shadow-3
+                  hover:surface-hover
+                  p-3
+                "
+              >
+                  {/* Header */}
+                  <div className="flex align-items-center justify-content-between mb-3">
+                    <div className="flex align-items-center">
+                      <Avatar
+                        image="https://primefaces.org/cdn/primereact/images/avatar/onyamalimba.png"
+                        className="mr-3"
+                      />
+                      <div>
+                        <div className="font-bold">{post.user}</div>
                         <small className="text-color-secondary">
-                          Hip Hop • 140 BPM
+                          há {post.hours}h
                         </small>
                       </div>
+                    </div>
+                    <Button icon="pi pi-ellipsis-h" rounded text />
+                  </div>
 
-                      {/* Slider */}
-                      <div className="mb-3">
-                        <div
-                          onClick={(e) => handleSliderClick(e, post)}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <Slider
-                            value={time}
-                            max={post.duration}
-                            step={0.1}
-                            onChange={(e) =>
-                              setCurrentTime(prev => ({
-                                ...prev,
-                                [post.id]: e.value as number
-                              }))
-                            }
-                          />
-                        </div>
+                  {/* Conteúdo */}
+                  <div className="mb-3">
+                    <div className="font-bold mb-1">{post.title}</div>
+                    <small className="text-color-secondary">
+                      Hip Hop • 140 BPM
+                    </small>
+                  </div>
 
-                        <div className="flex justify-content-between text-xs mt-1">
-                          <span>{formatTime(time)}</span>
-                          <span>{formatTime(post.duration)}</span>
-                        </div>
-                      </div>
+                  {/* Slider */}
+                  <div className="mb-3">
+                    <div
+                      onClick={(e) => handleSliderClick(e, post)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <Slider
+                        value={time}
+                        max={post.duration}
+                        step={0.1}
+                        onChange={(e) =>
+                          setCurrentTime(prev => ({
+                            ...prev,
+                            [post.id]: e.value as number
+                          }))
+                        }
+                      />
+                    </div>
 
-                      {/* Ações */}
-                      <div className="flex justify-content-between align-items-center">
-                        <div className="flex gap-3">
-                          <Button
-                            icon={isLiked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'}
-                            label={isLiked ? 'Curtido' : 'Curtir'}
-                            text
-                            onClick={() => toggleLike(post.id)}
-                          />
-                          <Button icon="pi pi-comment" label="Comentar" text />
-                          <Button icon="pi pi-share-alt" label="Compartilhar" text />
-                        </div>
+                    <div className="flex justify-content-between text-xs mt-1">
+                      <span>{formatTime(time)}</span>
+                      <span>{formatTime(post.duration)}</span>
+                    </div>
+                  </div>
 
-                        <div className="flex align-items-center gap-2">
-                          {/* Volume */}
-                          <div
-                            className="relative flex align-items-center"
-                            onMouseEnter={handleVolumeMouseEnter}
-                            onMouseLeave={handleVolumeMouseLeave}
-                          >
-                            <Button
-                              icon={
-                                isMuted || volume === 0
-                                  ? 'pi pi-volume-off'
-                                  : 'pi pi-volume-up'
-                              }
-                              rounded
-                              text
-                              onClick={toggleMute}
-                            />
+                  {/* Ações */}
+                  <div className="flex justify-content-between align-items-center">
+                    <div className="flex gap-3">
+                      <Button
+                        icon={isLiked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'}
+                        label={isLiked ? 'Curtido' : 'Curtir'}
+                        text
+                        onClick={() => toggleLike(post.id)}
+                      />
+                      <Button icon="pi pi-comment" label="Comentar" text />
+                      <Button icon="pi pi-share-alt" label="Compartilhar" text />
+                    </div>
 
-                            {showVolume && (
-                              <div
-                                className="absolute left-full ml-6 p-2 surface-card shadow-3 border-round"
-                                style={{ width: '120px', zIndex: 10 }}
-                              >
-                                <Slider
-                                  value={volume}
-                                  min={0}
-                                  max={100}
-                                  onChange={(e) =>
-                                    handleVolumeChange(e.value as number)
-                                  }
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {/* Play */}
+                    <div className="flex align-items-center gap-2">
+                      {/* Volume */}
+                      <div
+                        className="relative flex align-items-center"
+                        onMouseEnter={handleVolumeMouseEnter}
+                        onMouseLeave={handleVolumeMouseLeave}
+                      >
                         <Button
-                          icon={isPlaying ? 'pi pi-pause' : 'pi pi-play'}
+                          icon={
+                            isMuted || volume === 0
+                              ? 'pi pi-volume-off'
+                              : 'pi pi-volume-up'
+                          }
                           rounded
-                          severity="warning"
-                          onClick={() => togglePlay(post)}
+                          text
+                          onClick={toggleMute}
                         />
+
+                        {showVolume && (
+                          <div
+                            className="absolute left-full ml-6 p-2 surface-card shadow-3 border-round"
+                            style={{ width: '120px', zIndex: 10 }}
+                          >
+                            <Slider
+                              value={volume}
+                              min={0}
+                              max={100}
+                              onChange={(e) =>
+                                handleVolumeChange(e.value as number)
+                              }
+                            />
+                          </div>
+                        )}
                       </div>
-                    </Card>
-                  );
-                })}
-              </div>
-            </TabPanel>
-          </TabView>
+                    </div>
+                    {/* Play */}
+                    <Button
+                      icon={isPlaying ? 'pi pi-pause' : 'pi pi-play'}
+                      rounded
+                      severity="warning"
+                      onClick={() => togglePlay(post)}
+                    />
+                  </div>
+              </Card>
+            );
+          })}
+          <ScrollTop target="parent" className="p-3 border-rounded" icon="pi pi-arrow-up text-base" />
         </div>
-      </div>
-    </div>
+      </TabPanel>
+    </TabView>
   );
 };
 

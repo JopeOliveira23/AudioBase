@@ -16,7 +16,7 @@
   --primary-color: #8ab4f8; /* Cor primária (azul claro) */
   --secondary-color: #e8eaed; /* Cor secundária (cinza claro) */
   --tertiary-color: #9aa0a6; /* Cor terciária (cinza médio) */
-  --bg-color: #ffffff; /* Cor de fundo (cinza escuro) */
+  --bg-color: #1e1e1e; /* Cor de fundo (cinza escuro) */
 }
 
 body {
