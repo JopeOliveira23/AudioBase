@@ -1,19 +1,36 @@
 import { Outlet } from "react-router-dom";
-import Header from "../layout/header";
-import Footer from "../layout/footer";
+import Footer from "./footer";
+import Header from "./header";
+import LeftSidebar from "../components/Sidebar copy";
 
-export default function MainLayout() {
+const MainLayout = () => {
+
   return (
-    <div className="flex flex-column min-h-screen">
+    <div className="flex flex-column h-screen">
+      {/* Header fixo */}
       <Header />
-      
-      <main className="flex flex-column flex-1 align-items-center py-6">
-        <div className="w-full px-3 flex flex-column flex-1" style={{ maxWidth: "1000px" }}>
-          <Outlet />
-        </div>
-      </main>
-      
+
+      {/* Corpo */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar fixa */}
+        <LeftSidebar />
+
+        {/* Área central */}
+        <main className="flex-1 overflow-hidden">
+          {/* ESTE é o único scroll da aplicação */}
+          <div className="h-full p-4 flex justify-content-center">
+            <div className="w-full overflow-hidden" style={{ maxWidth: '1200px', height: 'calc(100vh - 21vh)' }}> 
+              <Outlet />
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Footer fixa */}
       <Footer />
     </div>
   );
-}
+};
+
+
+export default MainLayout;

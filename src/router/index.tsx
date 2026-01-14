@@ -35,8 +35,9 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
         children: [
-          { path: "/", element: <Home /> },
-        ]
+          { path: '/', element: <Home /> },
+          { path: "/error", element: <Error /> },
+        ],
       }
     ]
   },

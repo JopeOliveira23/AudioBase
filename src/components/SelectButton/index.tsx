@@ -2,14 +2,14 @@ import { SelectButton } from "primereact/selectbutton";
 import { useState } from "react";
 
 const SelectButtonComponent = () => {
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState<'artists' | 'studio'>('artists');
 
   const justifyOptions = [
     {icon: 'pi pi-users', value: 'artists'},
     {icon: 'pi pi-home', value: 'studio'},
   ];
 
-  const justifyTemplate = (option: { icon: string | undefined; }) => {
+  const justifyTemplate = (option: { icon: string }) => {
     return <i className={option.icon}></i>;
   }
 

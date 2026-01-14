@@ -46,6 +46,96 @@ const Home: React.FC = () => {
     { id: 3, user: 'LoFi Lab', hours: 6, title: 'Midnight Chill', duration: 172 },
   ];
 
+  type ContestType = 'beats' | 'vocals' | 'instrumental';
+
+  type LabelPost = {
+    id: number;
+    label: string;        // nome da gravadora
+    hours: number;
+    contest: string;      // nome do contest
+    genre: string;
+    description: string;
+    deadline: string;
+    type: ContestType;
+  };
+
+  const contestIconMap: Record<ContestType, string> = {
+    beats: 'pi pi-headphones',
+    vocals: 'pi pi-microphone',
+    instrumental: 'pi pi-volume-up',
+  };
+
+
+  const labelPosts: LabelPost[] = [
+    {
+      id: 1,
+      label: 'Urban Records',
+      hours: 2,
+      contest: 'New Trap Voices 2026',
+      genre: 'Trap / Hip Hop',
+      description:
+        'Estamos procurando novos artistas para integrar o nosso casting. Envie sua melhor track autoral.',
+      deadline: '20 Fev 2026',
+      type: 'vocals',
+    },
+    {
+      id: 2,
+      label: 'Midnight Sounds',
+      hours: 5,
+      contest: 'Lo-Fi Beats Contest',
+      genre: 'Lo-Fi / Chillhop',
+      description:
+        'Seleção de produtores independentes para compilar nosso próximo álbum lo-fi.',
+      deadline: '10 Mar 2026',
+      type: 'beats',
+    },
+    {
+      id: 3,
+      label: 'Bassline Collective',
+      hours: 8,
+      contest: 'House & Tech Open Call',
+      genre: 'House / Tech House',
+      description:
+        'Vagas abertas para produtores com identidade forte e grooves dançantes.',
+      deadline: '01 Abr 2026',
+      type: 'beats',
+    },
+        {
+      id: 1,
+      label: 'Urban Records',
+      hours: 2,
+      contest: 'New Trap Voices 2026',
+      genre: 'Trap / Hip Hop',
+      description:
+        'Estamos procurando novos artistas para integrar o nosso casting. Envie sua melhor track autoral.',
+      deadline: '20 Fev 2026',
+      type: 'vocals',
+    },
+    {
+      id: 2,
+      label: 'Midnight Sounds',
+      hours: 5,
+      contest: 'Lo-Fi Beats Contest',
+      genre: 'Lo-Fi / Chillhop',
+      description:
+        'Seleção de produtores independentes para compilar nosso próximo álbum lo-fi.',
+      deadline: '10 Mar 2026',
+      type: 'beats',
+    },
+    {
+      id: 3,
+      label: 'Bassline Collective',
+      hours: 8,
+      contest: 'House & Tech Open Call',
+      genre: 'House / Tech House',
+      description:
+        'Vagas abertas para produtores com identidade forte e grooves dançantes.',
+      deadline: '01 Abr 2026',
+      type: 'beats',
+    },
+  ];
+
+
   /* =======================
    * Handlers
    * ======================= */
@@ -288,12 +378,22 @@ const Home: React.FC = () => {
    * ======================= */
   return (
     <TabView className="w-full">
-      <TabPanel header="Explorar">
+      <TabPanel header="Publicações">
         <div className="flex flex-column gap-6 overflow-auto" style={{height: 'calc(100vh - 27vh)'}}>
           {posts.map(post => {
             const isLiked = likedPosts.includes(post.id);
             const time = currentTime[post.id] ?? 0;
             const isPlaying = playingPostId === post.id;
+            const getInitials = (name = '') => {
+              return name
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(word => word[0])
+                .join('')
+                .toUpperCase();
+            };
 
             return (
               <Card
@@ -313,8 +413,14 @@ const Home: React.FC = () => {
                   <div className="flex align-items-center justify-content-between mb-3">
                     <div className="flex align-items-center">
                       <Avatar
-                        image="https://primefaces.org/cdn/primereact/images/avatar/onyamalimba.png"
-                        className="mr-3"
+                        label={getInitials(post.user)}
+                        className="
+                          mr-3
+                          text-white
+                          font-bold
+                          p-4
+                        "
+                        shape="circle"
                       />
                       <div>
                         <div className="font-bold">{post.user}</div>
@@ -420,6 +526,108 @@ const Home: React.FC = () => {
           })}
           <ScrollTop target="parent" className="p-3 border-rounded" icon="pi pi-arrow-up text-base" />
         </div>
+      </TabPanel>
+      <TabPanel header="Gravadoras">
+  <div
+    className="flex flex-column gap-6 overflow-auto"
+    style={{ height: 'calc(100vh - 27vh)' }}
+  >
+{labelPosts.map(post => {
+  const isLiked = likedPosts.includes(post.id);
+  
+  const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+  };
+
+    const contestIconMap: Record<ContestType, string> = {
+    beats: 'pi pi-headphones',
+    vocals: 'pi pi-microphone',
+    instrumental: 'pi pi-volume-up',
+  };
+
+
+  return (
+    <Card key={post.id} className="surface-card border-round-xl shadow-1 p-3">
+      
+      {/* Header */}
+      <div className="flex align-items-center justify-content-between mb-3">
+        <div className="flex align-items-center">
+          <Avatar
+            label={getInitials(post.label)}
+            className="
+              mr-3
+              text-white
+              font-bold
+              p-4
+            "
+            shape="circle"
+          />
+
+          <div>
+            <div className="font-bold">{post.label}</div>
+            <small className="text-color-secondary">
+              há {post.hours}h
+            </small>
+          </div>
+        </div>
+        <Button icon="pi pi-ellipsis-h" rounded text />
+      </div>
+
+      {/* Conteúdo */}
+      <div className="mb-3">
+        <div className="font-bold text-lg mb-1 flex align-items-center gap-2">
+          <i className={contestIconMap[post.type]} />
+          <span>{post.contest}</span>
+        </div>
+
+        <small className="text-color-secondary block mb-2">
+          {post.genre}
+        </small>
+
+        <p className="text-sm line-height-3">
+          {post.description}
+        </p>
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-content-between align-items-center">
+        <div className="flex gap-3">
+          <Button
+            icon={isLiked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'}
+            label={isLiked ? 'Interessado' : 'Tenho interesse'}
+            text
+            onClick={() => toggleLike(post.id)}
+          />
+
+          <Button icon="pi pi-comment" label="Perguntar" text />
+        </div>
+
+        <div className="flex align-items-center gap-3">
+          <span className="text-sm text-color-secondary">
+            📅 {post.deadline}
+          </span>
+
+          <Button
+            icon="pi pi-send"
+            label="Enviar Demo"
+            severity="warning"
+          />
+        </div>
+      </div>
+    </Card>
+  );
+})}
+
+    <ScrollTop
+      target="parent"
+      className="p-3 border-rounded"
+      icon="pi pi-arrow-up text-base"
+    />
+  </div>
       </TabPanel>
     </TabView>
   );
