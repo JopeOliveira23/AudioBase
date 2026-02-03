@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import { useState } from "react";
-import * as S from "./App.ts";
+import * as S from "./style.ts";
 
 const Notifications = () => {
   const [notifyValue, setNotifyValue] = useState(4);
