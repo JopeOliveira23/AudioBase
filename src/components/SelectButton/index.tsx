@@ -6,7 +6,7 @@ const SelectButtonComponent = () => {
 
   const justifyOptions = [
     {icon: 'pi pi-users', value: 'artists'},
-    {icon: 'pi pi-home', value: 'studio'},
+    {icon: 'pi pi-desktop', value: 'studio'},
   ];
 
   const justifyTemplate = (option: { icon: string }) => {

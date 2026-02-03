@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as S from './style.ts'
 import SidebarComponent from "../Sidebar/index.tsx";
+import logo from "../../assets/logo.png";
 
 type SidebarRoute = {
   label: string;
@@ -11,10 +12,12 @@ type SidebarRoute = {
 };
 
 const sidebarRoutes: SidebarRoute[] = [
-  { label: "Feed", icon: "pi pi-home", path: "/" },
-  { label: "Colaborações", icon: "pi pi-users", path: "/error" },
+  { label: "Página Inicial", icon: "pi pi-home", path: "/" },
+  { label: "Minhas Letras", icon: "pi pi-pen-to-square", path: "/error" },
+  { label: "Minhas Gravações", icon: "pi pi-microphone", path: "/error" },
+  { label: "Minhas Produções", icon: "pi pi-headphones", path: "/error" },
   { label: "Compromissos", icon: "pi pi-calendar", path: "/error" },
-  { label: "Estúdios", icon: "pi pi-map", path: "/error" },
+  { label: "Buscar Estúdios", icon: "pi pi-map", path: "/error" },
 ];
 
 const LeftSidebar = () => {
@@ -22,6 +25,7 @@ const LeftSidebar = () => {
   const location = useLocation();
 
   const [expanded, setExpanded] = useState(false);
+  const [locked, setLocked] = useState(false);
   const [activeLabel, setActiveLabel] = useState("Feed");
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -36,13 +40,14 @@ const LeftSidebar = () => {
   };
 
   const handleSidebarClose = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    setLocked(false);
     setExpanded(false);
   };
 
   const handleLeave = () => {
+    if (locked) return;
+
     closeTimeoutRef.current = setTimeout(() => {
       setExpanded(false);
     }, 120);
@@ -56,8 +61,27 @@ const LeftSidebar = () => {
 
       start={
         <div
-          className="flex flex-column gap-4 pt-3"
+          className="flex flex-column gap-4"
         >
+          <div className="flex align-items-center justify-content-between pl-2 py-2">
+            <img
+              src={logo}
+              alt="AudioBase"
+              width={40}
+              height="auto"
+            />
+
+
+            {expanded && (
+              <Button
+                icon={locked ? "pi pi-lock" : "pi pi-lock-open"}
+                rounded
+                text={locked ? false : true}
+                outlined={locked ? true : false}
+                onClick={() => setLocked(prev => !prev)}
+              />
+            )}
+          </div>
           {sidebarRoutes.map(route => {
             const isActive = route.label === activeLabel;
 
@@ -70,7 +94,7 @@ const LeftSidebar = () => {
                 raised={isActive}
                 className="justify-content-start"
                 style={{
-                  width: expanded ? "11rem" : "3rem",
+                  width: expanded ? "11.5rem" : "3rem",
                   transition: "width 0.2s ease"
                 }}
                 onClick={() => {
