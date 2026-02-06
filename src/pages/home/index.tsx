@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   const [likedPosts, setLikedPosts] = useState<number[]>([]);
   const [playingPostId, setPlayingPostId] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState<Record<number, number>>({});
-  const [volume, setVolume] = useState(80);
+  const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -542,6 +542,7 @@ const Home: React.FC = () => {
                             rounded
                             text
                             onClick={toggleMute}
+                            style={{marginRight: '9rem'}}
                           />
                           {showVolume && (
                             <div

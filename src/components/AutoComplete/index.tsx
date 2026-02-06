@@ -19,7 +19,7 @@ const AutoCompleteComponent = () => {
   return (
     <IconField iconPosition="right">
       <AutoComplete
-        size={50}
+        size={40}
         value={value}
         suggestions={items}
         completeMethod={search}

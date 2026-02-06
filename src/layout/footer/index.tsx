@@ -1,6 +1,6 @@
 const Footer = () => {
     return(
-        <footer className="footer">
+        <footer className="footer -ml-5">
             <ul className="footer-links">
                 <li>
                     <a href="https://github.com/JopeOliveira23" target="_blank">GitHub</a>
