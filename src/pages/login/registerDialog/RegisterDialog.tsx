@@ -86,6 +86,11 @@ export const RegisterDialog = ({ visible, onHide, onSuccess }: RegisterDialogPro
             inputStyle={{ width: "21.8rem" }}
             toggleMask
             feedback={false}
+            pt={{
+              showIcon: {
+                tabIndex: -1
+              }
+            }}
           />
           <label>Confirmar senha</label>
           <Password
@@ -99,6 +104,11 @@ export const RegisterDialog = ({ visible, onHide, onSuccess }: RegisterDialogPro
             inputStyle={{ width: "21.8rem" }}
             toggleMask
             feedback={false}
+            pt={{
+              showIcon: {
+                tabIndex: -1
+              }
+            }}
           />
           {passwordMismatch && newUser.confirm.length > 0 && (
             <p style={{ color: "red", fontSize: "0.8rem" }}>As senhas não coincidem.</p>

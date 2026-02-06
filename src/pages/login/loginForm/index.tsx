@@ -96,6 +96,11 @@ export const LoginForm = ({ onLoginSuccess, onOpenRegister, provideClear }: Logi
             placeholder="Digite sua senha"
             toggleMask
             feedback={false}
+            pt={{
+              showIcon: {
+                tabIndex: -1
+              }
+            }}
           />
         </div>
 
