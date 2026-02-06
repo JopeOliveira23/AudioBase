@@ -7,7 +7,7 @@ const MainLayout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       
-      {/* Sidebar fixa - ocupa 100vh */}
+      {/* Sidebar */}
       <LeftSidebar />
 
       {/* Coluna principal */}
@@ -18,13 +18,8 @@ const MainLayout = () => {
 
         {/* Conteúdo */}
         <main className="flex-1 overflow-hidden">
-          <div className="h-full p-4 flex justify-content-center overflow-y-auto">
-            <div
-              className="w-full"
-              style={{ maxWidth: "1200px" }}
-            >
-              <Outlet />
-            </div>
+          <div className="h-full w-full p-4 flex justify-content-center">
+            <Outlet />
           </div>
         </main>
 

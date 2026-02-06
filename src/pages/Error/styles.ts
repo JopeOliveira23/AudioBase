@@ -1,7 +1,7 @@
 import styled, {keyframes} from "styled-components"
 import {WifiX} from "@phosphor-icons/react";
 
-export const Background = styled.main`
+export const Background = styled.div`
   background: linear-gradient(
     90deg, 
     rgba(28, 28, 28, 1) 0%, 
@@ -11,8 +11,8 @@ export const Background = styled.main`
     rgba(28, 28, 28, 1) 100%
   );
 
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 
   padding: 1rem;
 
@@ -23,8 +23,8 @@ export const Background = styled.main`
 
 export const ImageWrapper = styled.div`
   position: relative;
-  width: 10rem;
-  height: 10rem;
+  width: 50%;
+  height: 50%;
   margin: 0 auto;
   
   display: flex;
@@ -64,8 +64,8 @@ export const Wifi = styled(WifiX)`
   animation-duration: 5s;
   animation-iteration-count: infinite;
 
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 
   position: absolute;
   transform: perspective(300px) rotateX(45deg) rotateY(45deg);

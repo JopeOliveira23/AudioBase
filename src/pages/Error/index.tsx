@@ -14,7 +14,7 @@ export default function Login() {
 
   return (
     <Background>
-      <Card title="Ocorreu um erro" style={{ width: "450px", textAlign: "center" }}>
+      <Card title="Ocorreu um erro" style={{ maxWidth: "20rem", textAlign: "center" }}>
         <p className="mt-0">
           Um erro inesperado ocorreu ao carregar os dados.
           <br />

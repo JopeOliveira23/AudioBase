@@ -4,7 +4,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Slider } from 'primereact/slider';
-import { ScrollTop } from 'primereact/scrolltop';
+import { Background } from './style';
 
 /* =======================
  * Types
@@ -28,12 +28,16 @@ const Home: React.FC = () => {
   const [volume, setVolume] = useState(80);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
 
   /* ---------- Refs ---------- */
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastVolumeRef = useRef(80);
   const hideVolumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastPlayedPostRef = useRef<Post | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);  
 
 
   /* ---------- Mock Data ---------- */
@@ -58,13 +62,6 @@ const Home: React.FC = () => {
     deadline: string;
     type: ContestType;
   };
-
-  const contestIconMap: Record<ContestType, string> = {
-    beats: 'pi pi-headphones',
-    vocals: 'pi pi-microphone',
-    instrumental: 'pi pi-volume-up',
-  };
-
 
   const labelPosts: LabelPost[] = [
     {
@@ -258,6 +255,10 @@ const Home: React.FC = () => {
     const secs = total % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setShowScrollTop(e.currentTarget.scrollTop > 200);
+  };
   
   /* =======================
    * Effects
@@ -377,259 +378,332 @@ const Home: React.FC = () => {
    * Render
    * ======================= */
   return (
-    <TabView className="w-full">
-      <TabPanel header="Publicações">
-        <div className="flex flex-column gap-6 overflow-auto" style={{height: 'calc(100vh - 27vh)'}}>
-          {posts.map(post => {
-            const isLiked = likedPosts.includes(post.id);
-            const time = currentTime[post.id] ?? 0;
-            const isPlaying = playingPostId === post.id;
-            const getInitials = (name = '') => {
-              return name
-                .trim()
-                .split(/\s+/)
-                .filter(Boolean)
-                .slice(0, 2)
-                .map(word => word[0])
-                .join('')
-                .toUpperCase();
-            };
+    <Background>
+      <div className="h-full w-full overflow-auto" ref={containerRef} onScroll={handleScroll}>
+        <TabView>
 
-            return (
-              <Card
-                key={post.id}
-                className="
-                  surface-card
-                  border-round-xl
-                  shadow-1
-                  transition-all
-                  transition-duration-200
-                  hover:shadow-3
-                  hover:surface-hover
-                  p-3
-                "
-              >
-                  {/* Header */}
-                  <div className="flex align-items-center justify-content-between mb-3">
-                    <div className="flex align-items-center">
-                      <Avatar
-                        label={getInitials(post.user)}
-                        className="
-                          mr-3
-                          text-white
-                          font-bold
-                          p-4
-                        "
-                        shape="circle"
-                      />
-                      <div>
-                        <div className="font-bold">{post.user}</div>
-                        <small className="text-color-secondary">
-                          há {post.hours}h
-                        </small>
-                      </div>
-                    </div>
-                    <Button icon="pi pi-ellipsis-h" rounded text />
-                  </div>
+          <TabPanel header="Publicações">
+            {showScrollTop && (
+              <Button
+                icon={`pi ${isRefreshing ? 'pi-spin' : ''} pi-refresh`}
+                label={isRefreshing ? 'Carregando...' : 'Novos posts'}
+                rounded
+                style={{position: 'sticky', top: '3%', left: '45%', zIndex: 2000}}
+                onClick={() => {
+                  setIsRefreshing(true);
+                
+                  containerRef.current?.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  });
+                
+                  setTimeout(() => {
+                    setIsRefreshing(false);
+                  }, 1000);
+                }}
+              />
+            )}
+            <div className="flex flex-column gap-6">
+              {posts.map(post => {
+                const isLiked = likedPosts.includes(post.id);
+                const time = currentTime[post.id] ?? 0;
+                const isPlaying = playingPostId === post.id;
 
-                  {/* Conteúdo */}
-                  <div className="mb-3">
-                    <div className="font-bold mb-1">{post.title}</div>
-                    <small className="text-color-secondary">
-                      Hip Hop • 140 BPM
-                    </small>
-                  </div>
+                const getInitials = (name = '') => {
+                  return name
+                    .trim()
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .map(word => word[0])
+                    .join('')
+                    .toUpperCase();
+                };
 
-                  {/* Slider */}
-                  <div className="mb-3">
-                    <div
-                      onClick={(e) => handleSliderClick(e, post)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <Slider
-                        value={time}
-                        max={post.duration}
-                        step={0.1}
-                        onChange={(e) =>
-                          setCurrentTime(prev => ({
-                            ...prev,
-                            [post.id]: e.value as number
-                          }))
-                        }
-                      />
-                    </div>
-
-                    <div className="flex justify-content-between text-xs mt-1">
-                      <span>{formatTime(time)}</span>
-                      <span>{formatTime(post.duration)}</span>
-                    </div>
-                  </div>
-
-                  {/* Ações */}
-                  <div className="flex justify-content-between align-items-center">
-                    <div className="flex gap-3">
-                      <Button
-                        icon={isLiked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'}
-                        label={isLiked ? 'Curtido' : 'Curtir'}
-                        text
-                        onClick={() => toggleLike(post.id)}
-                      />
-                      <Button icon="pi pi-comment" label="Comentar" text />
-                      <Button icon="pi pi-share-alt" label="Compartilhar" text />
-                    </div>
-
-                    <div className="flex align-items-center gap-2">
-                      {/* Volume */}
-                      <div
-                        className="relative flex align-items-center"
-                        onMouseEnter={handleVolumeMouseEnter}
-                        onMouseLeave={handleVolumeMouseLeave}
-                      >
-                        <Button
-                          icon={
-                            isMuted || volume === 0
-                              ? 'pi pi-volume-off'
-                              : 'pi pi-volume-up'
-                          }
-                          rounded
-                          text
-                          onClick={toggleMute}
+                return (
+                  <Card
+                    key={post.id}
+                    className="
+                      surface-card
+                      border-round-xl
+                      shadow-1
+                      transition-all
+                      transition-duration-200
+                      hover:shadow-3
+                      hover:surface-hover
+                      p-3
+                    "
+                  >
+                    {/* Header */}
+                    <div className="flex align-items-center justify-content-between mb-3">
+                      <div className="flex align-items-center">
+                        <Avatar
+                          label={getInitials(post.user)}
+                          className="
+                            mr-3
+                            text-white
+                            font-bold
+                            p-4
+                          "
+                          shape="circle"
                         />
 
-                        {showVolume && (
-                          <div
-                            className="absolute left-full ml-6 p-2 surface-card shadow-3 border-round"
-                            style={{ width: '120px', zIndex: 10 }}
-                          >
-                            <Slider
-                              value={volume}
-                              min={0}
-                              max={100}
-                              onChange={(e) =>
-                                handleVolumeChange(e.value as number)
-                              }
-                            />
-                          </div>
-                        )}
+                        <div>
+                          <div className="font-bold">{post.user}</div>
+                          <small className="text-color-secondary">
+                            há {post.hours}h
+                          </small>
+                        </div>
+                      </div>
+
+                      <Button icon="pi pi-ellipsis-h" rounded text />
+                    </div>
+
+                    {/* Conteúdo */}
+                    <div className="mb-3">
+                      <div className="font-bold mb-1">
+                        {post.title}
+                      </div>
+
+                      <small className="text-color-secondary">
+                        Hip Hop • 140 BPM
+                      </small>
+                    </div>
+
+                    {/* Slider */}
+                    <div className="mb-3">
+                      <div
+                        onClick={(e) => handleSliderClick(e, post)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <Slider
+                          value={time}
+                          max={post.duration}
+                          step={0.1}
+                          onChange={(e) =>
+                            setCurrentTime(prev => ({
+                              ...prev,
+                              [post.id]: e.value as number,
+                            }))
+                          }
+                        />
+                      </div>
+
+                      <div className="flex justify-content-between text-xs mt-1">
+                        <span>{formatTime(time)}</span>
+                        <span>{formatTime(post.duration)}</span>
                       </div>
                     </div>
-                    {/* Play */}
-                    <Button
-                      icon={isPlaying ? 'pi pi-pause' : 'pi pi-play'}
-                      rounded
-                      severity="warning"
-                      onClick={() => togglePlay(post)}
-                    />
-                  </div>
-              </Card>
-            );
-          })}
-          <ScrollTop target="parent" className="p-3 border-rounded" icon="pi pi-arrow-up text-base" />
-        </div>
-      </TabPanel>
-      <TabPanel header="Gravadoras">
-  <div
-    className="flex flex-column gap-6 overflow-auto"
-    style={{ height: 'calc(100vh - 27vh)' }}
-  >
-{labelPosts.map(post => {
-  const isLiked = likedPosts.includes(post.id);
-  
-  const getInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map(word => word[0])
-    .join('')
-    .toUpperCase();
-  };
 
-    const contestIconMap: Record<ContestType, string> = {
-    beats: 'pi pi-headphones',
-    vocals: 'pi pi-microphone',
-    instrumental: 'pi pi-volume-up',
-  };
+                    {/* Ações */}
+                    <div className="flex justify-content-between align-items-center">
+                      <div className="flex gap-3">
+                        <Button
+                          icon={
+                            isLiked
+                              ? 'pi pi-thumbs-up-fill'
+                              : 'pi pi-thumbs-up'
+                          }
+                          label={
+                            isLiked
+                              ? 'Curtido'
+                              : 'Curtir'
+                          }
+                          text
+                          onClick={() => toggleLike(post.id)}
+                        />
 
+                        <Button
+                          icon="pi pi-comment"
+                          label="Comentar"
+                          text
+                        />
 
-  return (
-    <Card key={post.id} className="surface-card border-round-xl shadow-1 p-3">
-      
-      {/* Header */}
-      <div className="flex align-items-center justify-content-between mb-3">
-        <div className="flex align-items-center">
-          <Avatar
-            label={getInitials(post.label)}
-            className="
-              mr-3
-              text-white
-              font-bold
-              p-4
-            "
-            shape="circle"
-          />
+                        <Button
+                          icon="pi pi-share-alt"
+                          label="Compartilhar"
+                          text
+                        />
+                      </div>
 
-          <div>
-            <div className="font-bold">{post.label}</div>
-            <small className="text-color-secondary">
-              há {post.hours}h
-            </small>
-          </div>
-        </div>
-        <Button icon="pi pi-ellipsis-h" rounded text />
+                      <div className="flex align-items-center gap-2">
+                        {/* Volume */}
+                        <div
+                          className="relative flex align-items-center"
+                          onMouseEnter={handleVolumeMouseEnter}
+                          onMouseLeave={handleVolumeMouseLeave}
+                        >
+                          <Button
+                            icon={
+                              isMuted || volume === 0
+                                ? 'pi pi-volume-off'
+                                : 'pi pi-volume-up'
+                            }
+                            rounded
+                            text
+                            onClick={toggleMute}
+                          />
+                          {showVolume && (
+                            <div
+                              className="absolute left-full ml-6 p-2 surface-card shadow-3 border-round"
+                              style={{ width: '120px', zIndex: 10 }}
+                            >
+                              <Slider
+                                value={volume}
+                                min={0}
+                                max={100}
+                                onChange={(e) =>
+                                  handleVolumeChange(e.value as number)
+                                }
+                              />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Play */}
+                        <Button
+                          icon={isPlaying ? 'pi pi-pause' : 'pi pi-play'}
+                          rounded
+                          severity="warning"
+                          onClick={() => togglePlay(post)}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </TabPanel>
+          <TabPanel header="Gravadoras">
+            {showScrollTop && (
+              <Button
+                icon={`pi ${isRefreshing ? 'pi-spin' : ''} pi-refresh`}
+                label={isRefreshing ? 'Carregando...' : 'Novos posts'}
+                rounded
+                style={{position: 'sticky', top: '3%', left: '45%', zIndex: 2000}}
+                onClick={() => {
+                  setIsRefreshing(true);
+                
+                  containerRef.current?.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  });
+                
+                  setTimeout(() => {
+                    setIsRefreshing(false);
+                  }, 1000);
+                }}
+              />
+            )}
+            <div className="flex flex-column gap-6">
+              {labelPosts.map(post => {
+                const isLiked = likedPosts.includes(post.id);
+
+                const getInitials = (name: string) => {
+                  return name
+                    .split(' ')
+                    .map(word => word[0])
+                    .join('')
+                    .toUpperCase();
+                };
+
+                const contestIconMap: Record<ContestType, string> = {
+                  beats: 'pi pi-headphones',
+                  vocals: 'pi pi-microphone',
+                  instrumental: 'pi pi-volume-up',
+                };
+
+                return (
+                  <Card
+                    key={post.id}
+                    className="surface-card border-round-xl shadow-1 p-3"
+                  >
+                    {/* Header */}
+                    <div className="flex align-items-center justify-content-between mb-3">
+                      <div className="flex align-items-center">
+                        <Avatar
+                          label={getInitials(post.label)}
+                          className="
+                            mr-3
+                            text-white
+                            font-bold
+                            p-4
+                          "
+                          shape="circle"
+                        />
+
+                        <div>
+                          <div className="font-bold">{post.label}</div>
+                          <small className="text-color-secondary">
+                            há {post.hours}h
+                          </small>
+                        </div>
+                      </div>
+
+                      <Button icon="pi pi-ellipsis-h" rounded text />
+                    </div>
+
+                    {/* Conteúdo */}
+                    <div className="mb-3">
+                      <div className="font-bold text-lg mb-1 flex align-items-center gap-2">
+                        <i className={contestIconMap[post.type]} />
+                        <span>{post.contest}</span>
+                      </div>
+
+                      <small className="text-color-secondary block mb-2">
+                        {post.genre}
+                      </small>
+
+                      <p className="text-sm line-height-3">
+                        {post.description}
+                      </p>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex justify-content-between align-items-center">
+                      <div className="flex gap-3">
+                        <Button
+                          icon={
+                            isLiked
+                              ? 'pi pi-thumbs-up-fill'
+                              : 'pi pi-thumbs-up'
+                          }
+                          label={
+                            isLiked
+                              ? 'Interessado'
+                              : 'Tenho interesse'
+                          }
+                          text
+                          onClick={() => toggleLike(post.id)}
+                        />
+
+                        <Button
+                          icon="pi pi-comment"
+                          label="Perguntar"
+                          text
+                        />
+                      </div>
+
+                      <div className="flex align-items-center gap-3">
+                        <span className="text-sm text-color-secondary">
+                          📅 {post.deadline}
+                        </span>
+
+                        <Button
+                          icon="pi pi-send"
+                          label="Enviar Demo"
+                          severity="warning"
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </TabPanel>
+        </TabView>
       </div>
-
-      {/* Conteúdo */}
-      <div className="mb-3">
-        <div className="font-bold text-lg mb-1 flex align-items-center gap-2">
-          <i className={contestIconMap[post.type]} />
-          <span>{post.contest}</span>
-        </div>
-
-        <small className="text-color-secondary block mb-2">
-          {post.genre}
-        </small>
-
-        <p className="text-sm line-height-3">
-          {post.description}
-        </p>
-      </div>
-
-      {/* Footer */}
-      <div className="flex justify-content-between align-items-center">
-        <div className="flex gap-3">
-          <Button
-            icon={isLiked ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'}
-            label={isLiked ? 'Interessado' : 'Tenho interesse'}
-            text
-            onClick={() => toggleLike(post.id)}
-          />
-
-          <Button icon="pi pi-comment" label="Perguntar" text />
-        </div>
-
-        <div className="flex align-items-center gap-3">
-          <span className="text-sm text-color-secondary">
-            📅 {post.deadline}
-          </span>
-
-          <Button
-            icon="pi pi-send"
-            label="Enviar Demo"
-            severity="warning"
-          />
-        </div>
-      </div>
-    </Card>
-  );
-})}
-
-    <ScrollTop
-      target="parent"
-      className="p-3 border-rounded"
-      icon="pi pi-arrow-up text-base"
-    />
-  </div>
-      </TabPanel>
-    </TabView>
+    </Background>
   );
 };
 
