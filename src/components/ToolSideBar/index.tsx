@@ -63,7 +63,7 @@ const LeftSidebar = () => {
         <div
           className="flex flex-column gap-4"
         >
-          <div className="flex align-items-center justify-content-between pl-2 py-2">
+          <div className="flex align-items-center justify-content-between pl-1 py-2">
             <img
               src={logo}
               alt="AudioBase"
