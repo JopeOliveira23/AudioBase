@@ -69,6 +69,10 @@ const LeftSidebar = () => {
               alt="AudioBase"
               width={40}
               height="auto"
+              style={{
+                opacity: expanded ? 0.7 : 1,
+                transition: "opacity 0.25s ease"
+              }}
             />
 
 
