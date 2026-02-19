@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import * as S from './style.ts'
+import * as S from './styles.ts'
 import SidebarComponent from "../Sidebar/index.tsx";
 import logo from "../../assets/logo.png";
 

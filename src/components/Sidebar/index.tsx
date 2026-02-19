@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 import { Sidebar } from "primereact/sidebar";
 import { useState } from "react";
-import * as S from "./style.ts";
+import * as S from "./styles.ts";
 import PanelMenuCustom from "../PanelMenu/index.tsx";
 
 type SidebarComponentProps = {

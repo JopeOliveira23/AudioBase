@@ -4,7 +4,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Slider } from 'primereact/slider';
-import { Background } from './style';
+import { Background } from './styles';
 
 /* =======================
  * Types

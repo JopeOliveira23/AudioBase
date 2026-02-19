@@ -2,7 +2,7 @@ import SelectButtonComponent from "../../components/SelectButton/index.tsx";
 import AutoCompleteComponent from "../../components/AutoComplete/index.tsx";
 import MenuComponent from "../../components/Menu/index.tsx";
 import Notofications from "../../components/Notifications/index.tsx";
-import * as S from '../../components/ToolSideBar/style.ts'
+import * as S from '../../components/ToolSideBar/styles.ts'
 
 const Header = () => {
   const centerContent = (
