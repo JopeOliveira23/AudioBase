@@ -5,7 +5,7 @@ import error from "../../assets/error.svg"
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 
-export default function Login() {
+export default function Error() {
   const navigate = useNavigate();
   const handleReload = () => {
     //navigate("/");
